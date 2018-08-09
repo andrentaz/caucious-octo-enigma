@@ -1,0 +1,23 @@
+# OS generated files
+.DS_Store*
+
+# Build temporary files
+*.pyc
+*.pyo
+*.swp
+*~
+\#*
+
+# Setuptools files
+/dist
+*.egg*
+/*/setup.cfg
+
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
