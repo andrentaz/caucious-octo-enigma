@@ -16,5 +16,7 @@ setuptools.setup(
     install_requires=[
         "flask",
         "flask-cors",
+        "passlib",
+        "pymongo",
     ]
 )
