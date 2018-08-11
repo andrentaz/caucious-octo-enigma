@@ -3,18 +3,21 @@ import flask
 from authentication.services.user import user_service
 
 
-blueprint = flask.Blueprint("users", __name__)
+blueprint = flask.Blueprint("user", __name__)
 
 @blueprint.route("/users", methods=["POST"])
 def create_user():
-    username = flask.request.json.get("username")
+    email = flask.request.json.get("email")
     password = flask.request.json.get("password")
 
-    if None in [username, password]:
+    if None in [email, password]:
         flask.abort(400)
 
-    user = user_service.create_user(username, password)
+    try:
+        user = user_service.create_user(email, password)
+    except user_service.EmailAlreadyUsed:
+        return flask.abort(400, description="email already used for other user")
 
     return flask.jsonify({
-        "username": user.username
+        "email": user.email
     })

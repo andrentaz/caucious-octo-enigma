@@ -1,16 +1,29 @@
+from pymongo import errors
+
 from authentication import models
 from authentication import mongo
 
 class UserRepository(object):
 
-    def create_user(self, username, pwd_hash):
+    class DuplicateUserError(Exception):
+        pass
+
+    def create_user(self, email, pwd_hash):
         user = models.User(
-            username=username,
+            email=email,
             password_hash=pwd_hash
         )
 
-        self._collection().save(user.serialize())
+        try:
+            self._collection().save(user.serialize())
+        except errors.DuplicateKeyError:
+            raise self.DuplicateUserError()
         return user
+
+    def get_by_email(self, email):
+        return models.User.loads(
+            **self._collection().find_one({"email": email})
+        )
     
     @classmethod
     def _collection(cls):
