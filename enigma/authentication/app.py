@@ -7,7 +7,12 @@ from flask_cors import CORS
 def create_app():
     app = Flask(__name__)
 
+    # app config
+    app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "vini vidi vinci")
+    app.config["TOKEN_EXPIRATION_TTL"] = os.environ.get("TOKEN_EXPIRATION_TTL", 600)
+
     # setup endpoints
+    import authentication.www.public_api.auth
     import authentication.www.public_api.index
     import authentication.www.public_api.user
 
@@ -17,6 +22,10 @@ def create_app():
     app.register_blueprint(
         authentication.www.public_api.user.blueprint,
         url_prefix="/api"
+    )
+    app.register_blueprint(
+        authentication.www.public_api.auth.blueprint,
+        url_prefix="/api/auth"
     )
     CORS(app, resources=r"/*", headers="Content-Type")
 

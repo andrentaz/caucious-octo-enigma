@@ -18,6 +18,4 @@ def create_user():
     except user_service.EmailAlreadyUsed:
         return flask.abort(400, description="email already used for other user")
 
-    return flask.jsonify({
-        "email": user.email
-    })
+    return "", 201
